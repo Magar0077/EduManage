@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="year-nav">
+    <a href="#" class="active">Overview</a>
+    <a href="#">Year 1</a>
+    <a href="#">Year 2</a>
+    <a href="#">Year 3</a>
+    <a href="#">Year 4</a>
+</div>
+
+<div class="row mb-5 justify-content-center">
+    <div class="col-md-6 text-center">
+        <h2 class="fw-bold mb-3">Academic Program Catalog</h2>
+        <form action="/search" class="d-flex shadow-sm">
+            <input type="text" name="q" class="form-control border-0 px-4" placeholder="Search course by name or code..." value="{{ query or '' }}">
+            <button class="btn btn-primary px-4" type="submit"><i class="bi bi-search"></i></button>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    {% for course in courses %}
+    <div class="col-md-4">
+        <div class="college-card">
+            <div class="card-banner">
+                <i class="bi bi-mortarboard fs-1 opacity-25"></i>
+                <div class="lock-badge"><i class="bi bi-lock-fill"></i></div>
+            </div>
+            <div class="p-4">
+                <span class="badge bg-secondary mb-2">{{ course.category }}</span>
+                <h5 class="fw-bold">{{ course.title }}</h5>
+                <p class="small text-muted mb-4">{{ course.code }}</p>
+                <div class="instructor-info">
+                    <div class="d-flex align-items-center">
+                        <div class="initial-circle">{{ course.code[:2] }}</div>
+                        <span class="ms-2 small fw-bold">Faculty Member</span>
+                    </div>
+                    <a href="/enroll/{{ course.id }}" class="btn btn-primary btn-sm rounded-pill px-3">Enroll</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="bg-white p-4 shadow-sm rounded d-flex justify-content-between align-items-center mb-4">
+    <h3 class="fw-bold mb-0">Course Management Repository</h3>
+    <button class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#addCourseModal">+ Create New Course</button>
+</div>
+
+<div class="table-responsive bg-white rounded shadow-sm p-3">
+    <table class="table table-hover align-middle">
+        <thead class="table-light">
+            <tr><th>Code</th><th>Course Name</th><th>Department</th><th>Management</th></tr>
+        </thead>
+        <tbody>
+            {% for c in courses %}
+            <tr>
+                <td class="fw-bold">{{ c.code }}</td>
+                <td>{{ c.title }}</td>
+                <td>{{ c.category }}</td>
+                <td><a href="/admin/delete/{{ c.id }}" class="btn btn-outline-danger btn-sm">Delete</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="modal fade" id="addCourseModal" tabindex="-1">
+    <div class="modal-dialog"><form action="/admin/add" method="POST" class="modal-content">
+        <div class="modal-header"><h5 class="modal-title">New Academic Course</h5></div>
+        <div class="modal-body">
+            <input type="text" name="code" placeholder="Course Code" class="form-control mb-3" required>
+            <input type="text" name="title" placeholder="Full Course Name" class="form-control mb-3" required>
+            <input type="text" name="category" placeholder="Department (e.g. IT)" class="form-control mb-3" required>
+            <textarea name="description" placeholder="Short Description" class="form-control" rows="3"></textarea>
+        </div>
+        <div class="modal-footer"><button type="submit" class="btn btn-primary w-100">Save to Repository</button></div>
+    </form></div>
+</div>
+{% endblock %}

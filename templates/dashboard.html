@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card p-4 text-center shadow-sm">
+            <div class="display-4 text-primary mb-2">👤</div>
+            <h4>{{ user.username }}</h4>
+            <span class="badge bg-info text-dark">{{ user.role.upper() }}</span>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card p-4 shadow-sm h-100">
+            <h5>My Enrollments</h5>
+            <hr>
+            {% for e in user.enrollments %}
+                <div class="alert alert-light border d-flex justify-content-between align-items-center">
+                    <span><strong>{{ e.course.code }}</strong> - {{ e.course.title }}</span>
+                    <span class="badge bg-success">In Progress</span>
+                </div>
+            {% else %}
+                <p>No enrollments yet. <a href="/">Browse courses</a>.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

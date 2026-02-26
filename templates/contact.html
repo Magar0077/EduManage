@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center py-5">
+    <div class="col-md-6">
+        <div class="bg-white p-5 shadow rounded border-top border-primary border-4">
+            <h3 class="fw-bold mb-4">Admissions & Support</h3>
+            <form action="/contact" method="POST">
+                <div class="mb-3"><input type="text" placeholder="Full Name" class="form-control" required></div>
+                <div class="mb-3"><input type="email" placeholder="Email Address" class="form-control" required></div>
+                <div class="mb-3"><textarea placeholder="Your Inquiry" class="form-control" rows="5" required></textarea></div>
+                <button type="submit" class="btn btn-primary w-100">Send Inquiry</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

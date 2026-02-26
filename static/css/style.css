@@ -1,0 +1,102 @@
+/* Layout Reset */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.content-wrapper { flex: 1; }
+
+/* Navigation */
+.navbar-college {
+    background-color: #003366; /* Deep University Blue */
+    border-bottom: 4px solid #cc9900; /* Gold Accent */
+}
+
+/* Year Tab Navigation */
+.year-nav {
+    display: flex;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.year-nav a {
+    flex: 1;
+    text-align: center;
+    padding: 12px;
+    text-decoration: none;
+    color: #003366;
+    font-weight: bold;
+    border-right: 1px solid #eee;
+}
+
+.year-nav a.active { background-color: #003366; color: white; }
+
+/* Professional Course Cards */
+.college-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+    overflow: hidden;
+    transition: 0.3s;
+}
+
+.college-card:hover { transform: translateY(-5px); }
+
+.card-banner {
+    background: #e9ecef;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    font-weight: bold;
+    color: #003366;
+}
+
+.lock-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: white;
+    padding: 5px;
+    border-radius: 50%;
+    color: #ffc107;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.instructor-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+.initial-circle {
+    width: 35px;
+    height: 35px;
+    background: #17a2b8;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+}
+
+/* Footer Styles */
+footer {
+    background: #212529;
+    color: white;
+    padding: 30px 0;
+    margin-top: 40px;
+}
