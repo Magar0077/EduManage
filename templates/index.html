@@ -7,17 +7,17 @@
         <p class="col-md-8 fs-5 opacity-75">Excellence in education for over 40 years. Providing professional 4-year degree tracks with a focus on academic innovation.</p>
         <hr class="my-4 opacity-25" style="width: 100px;">
         <div class="d-flex gap-3">
-            <a href="/register" class="btn btn-warning fw-bold px-4 py-2 rounded-pill text-dark">Apply Now</a>
-            <a href="/contact" class="btn btn-outline-light px-4 py-2 rounded-pill">Contact Admissions</a>
+            <a href="{{ url_for('register') }}" class="btn btn-warning fw-bold px-4 py-2 rounded-pill text-dark">Apply Now</a>
+            <a href="{{ url_for('contact') }}" class="btn btn-outline-light px-4 py-2 rounded-pill">Contact Admissions</a>
         </div>
     </div>
 </div>
 
 <div class="row mb-5">
     <div class="col-12 d-flex justify-content-center">
-        <div class="d-flex justify-content-center bg-white p-2 rounded-pill shadow-sm border border-light mx-auto" style="max-width: fit-content;">
+        <div class="d-flex justify-content-center bg-white p-2 rounded-pill shadow-sm border border-light mx-auto" style="width: fit-content;">
             {% for i in range(0, 5) %}
-            <a href="{{ '/?year=' ~ i if i > 0 else '/' }}" 
+            <a href="{{ url_for('index', year=i) if i > 0 else url_for('index') }}" 
                class="nav-year-link {{ 'active shadow' if (current_year == i or (i == 0 and not current_year)) else '' }}">
                 {{ 'Overview' if i == 0 else 'Year ' ~ i }}
             </a>
@@ -29,7 +29,7 @@
 <div class="row g-4">
     {% for course in courses %}
     <div class="col-md-4">
-        <div class="course-card h-100 border-0 shadow-sm bg-white overflow-hidden">
+        <div class="course-card h-100 border-0 shadow-sm bg-white overflow-hidden" style="border-radius: 15px;">
             <div class="card-accent"></div>
             
             <div class="p-4">
@@ -39,7 +39,9 @@
                 </div>
                 
                 <h5 class="fw-bold mb-3 text-dark">{{ course.title }}</h5>
-                <p class="text-muted small mb-4" style="line-height: 1.6;">{{ course.description[:110] if course.description else 'No description available for this course entry.' }}...</p>
+                <p class="text-muted small mb-4" style="line-height: 1.6;">
+                    {{ course.description[:110] if course.description else 'No description available for this course entry.' }}...
+                </p>
                 
                 <div class="d-flex align-items-center border-top pt-3 mt-auto">
                     <div class="text-white rounded-circle text-center fw-bold shadow-sm" 
@@ -54,13 +56,14 @@
             </div>
             
             <div class="p-4 pt-0 d-flex gap-2">
-                <a href="/course/{{ course.id }}" class="btn btn-outline-dark btn-sm rounded-pill flex-grow-1 fw-bold py-2">
+                <a href="{{ url_for('course_view', course_id=course.id) }}" class="btn btn-outline-dark btn-sm rounded-pill flex-grow-1 fw-bold py-2">
                     Chapters
                 </a>
-                <button class="btn btn-primary btn-sm rounded-pill flex-grow-1 fw-bold py-2" 
+                <a href="{{ url_for('enroll', course_id=course.id) }}" 
+                   class="btn btn-primary btn-sm rounded-pill flex-grow-1 fw-bold py-2" 
                    style="background-color: var(--lincoln-blue); border: none;">
                     Enroll Now
-                </button>
+                </a>
             </div>
         </div>
     </div>

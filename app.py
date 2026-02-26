@@ -41,7 +41,8 @@ class Enrollment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     course_id = db.Column(db.Integer, db.ForeignKey('course.id'), nullable=False)
-    course = db.relationship('Course')
+    # Changed to 'course_rel' or 'course' to avoid conflicts with backrefs
+    course = db.relationship('Course', backref='course_enrollments')
 
 
 
@@ -54,7 +55,6 @@ def load_user(user_id):
 @app.route('/')
 def index():
     year_filter = request.args.get('year', type=int)
-    # Filter courses by year if requested, else show all
     courses = Course.query.filter_by(year=year_filter).all() if year_filter else Course.query.all()
     return render_template('index.html', courses=courses, current_year=year_filter)
 
@@ -62,6 +62,27 @@ def index():
 def course_view(course_id):
     course = Course.query.get_or_404(course_id)
     return render_template('course_view.html', course=course)
+
+# --- NEW ENROLLMENT ROUTE ---
+
+@app.route('/enroll/<int:course_id>')
+@login_required
+def enroll(course_id):
+    # Check if course exists
+    course = Course.query.get_or_404(course_id)
+    
+    # Check if already enrolled
+    existing_enrollment = Enrollment.query.filter_by(user_id=current_user.id, course_id=course_id).first()
+    
+    if existing_enrollment:
+        flash(f"You are already enrolled in {course.title}.", "info")
+    else:
+        new_enrollment = Enrollment(user_id=current_user.id, course_id=course_id)
+        db.session.add(new_enrollment)
+        db.session.commit()
+        flash(f"Successfully enrolled in {course.title}!", "success")
+    
+    return redirect(url_for('dashboard'))
 
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
@@ -76,7 +97,6 @@ def contact():
 def register():
     if request.method == 'POST':
         hashed_pw = generate_password_hash(request.form['password'], method='pbkdf2:sha256')
-        # First user is admin, others are students
         role = 'admin' if User.query.count() == 0 else 'student'
         new_user = User(username=request.form['username'], email=request.form['email'], password=hashed_pw, role=role)
         db.session.add(new_user)
@@ -98,6 +118,7 @@ def login():
 @app.route('/dashboard')
 @login_required
 def dashboard():
+    # Pass 'user' to the template to match your current dashboard.html
     return render_template('dashboard.html', user=current_user)
 
 # --- ADMIN ROUTES ---
