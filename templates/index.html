@@ -1,45 +1,77 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="year-nav">
-    <a href="#" class="active">Overview</a>
-    <a href="#">Year 1</a>
-    <a href="#">Year 2</a>
-    <a href="#">Year 3</a>
-    <a href="#">Year 4</a>
-</div>
 
-<div class="row mb-5 justify-content-center">
-    <div class="col-md-6 text-center">
-        <h2 class="fw-bold mb-3">Academic Program Catalog</h2>
-        <form action="/search" class="d-flex shadow-sm">
-            <input type="text" name="q" class="form-control border-0 px-4" placeholder="Search course by name or code..." value="{{ query or '' }}">
-            <button class="btn btn-primary px-4" type="submit"><i class="bi bi-search"></i></button>
-        </form>
+<div class="p-5 mb-5 text-white rounded-4 shadow-lg" style="background: linear-gradient(rgba(26, 35, 126, 0.85), rgba(26, 35, 126, 0.85)), url('https://images.unsplash.com/photo-1523050853063-bd8012fec046?auto=format&fit=crop&w=1200&q=80'); background-size: cover; background-position: center;">
+    <div class="container py-4">
+        <h1 class="display-4 fw-bold">Lincoln College</h1>
+        <p class="col-md-8 fs-5 opacity-75">Excellence in education for over 40 years. Providing professional 4-year degree tracks with a focus on academic innovation.</p>
+        <hr class="my-4 opacity-25" style="width: 100px;">
+        <div class="d-flex gap-3">
+            <a href="/register" class="btn btn-warning fw-bold px-4 py-2 rounded-pill text-dark">Apply Now</a>
+            <a href="/contact" class="btn btn-outline-light px-4 py-2 rounded-pill">Contact Admissions</a>
+        </div>
     </div>
 </div>
 
-<div class="row">
+<div class="row mb-5">
+    <div class="col-12 d-flex justify-content-center">
+        <div class="d-flex justify-content-center bg-white p-2 rounded-pill shadow-sm border border-light mx-auto" style="max-width: fit-content;">
+            {% for i in range(0, 5) %}
+            <a href="{{ '/?year=' ~ i if i > 0 else '/' }}" 
+               class="nav-year-link {{ 'active shadow' if (current_year == i or (i == 0 and not current_year)) else '' }}">
+                {{ 'Overview' if i == 0 else 'Year ' ~ i }}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
     {% for course in courses %}
     <div class="col-md-4">
-        <div class="college-card">
-            <div class="card-banner">
-                <i class="bi bi-mortarboard fs-1 opacity-25"></i>
-                <div class="lock-badge"><i class="bi bi-lock-fill"></i></div>
-            </div>
+        <div class="course-card h-100 border-0 shadow-sm bg-white overflow-hidden">
+            <div class="card-accent"></div>
+            
             <div class="p-4">
-                <span class="badge bg-secondary mb-2">{{ course.category }}</span>
-                <h5 class="fw-bold">{{ course.title }}</h5>
-                <p class="small text-muted mb-4">{{ course.code }}</p>
-                <div class="instructor-info">
-                    <div class="d-flex align-items-center">
-                        <div class="initial-circle">{{ course.code[:2] }}</div>
-                        <span class="ms-2 small fw-bold">Faculty Member</span>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="badge rounded-pill bg-light text-dark border px-3 py-2 fw-bold" style="font-size: 0.75rem;">{{ course.code }}</span>
+                    <small class="text-uppercase fw-bold text-muted" style="font-size: 0.7rem; letter-spacing: 1px;">Level {{ course.year }}</small>
+                </div>
+                
+                <h5 class="fw-bold mb-3 text-dark">{{ course.title }}</h5>
+                <p class="text-muted small mb-4" style="line-height: 1.6;">{{ course.description[:110] if course.description else 'No description available for this course entry.' }}...</p>
+                
+                <div class="d-flex align-items-center border-top pt-3 mt-auto">
+                    <div class="text-white rounded-circle text-center fw-bold shadow-sm" 
+                         style="width:34px; height:34px; font-size:13px; line-height:34px; background-color: var(--lincoln-blue);">
+                        {{ course.instructor[0]|upper if course.instructor else 'L' }}
                     </div>
-                    <a href="/enroll/{{ course.id }}" class="btn btn-primary btn-sm rounded-pill px-3">Enroll</a>
+                    <div class="ms-3">
+                        <p class="mb-0 small fw-bold text-dark">Prof. {{ course.instructor or 'Staff' }}</p>
+                        <p class="mb-0 text-muted" style="font-size: 0.7rem;">Lincoln Faculty</p>
+                    </div>
                 </div>
             </div>
+            
+            <div class="p-4 pt-0 d-flex gap-2">
+                <a href="/course/{{ course.id }}" class="btn btn-outline-dark btn-sm rounded-pill flex-grow-1 fw-bold py-2">
+                    Chapters
+                </a>
+                <button class="btn btn-primary btn-sm rounded-pill flex-grow-1 fw-bold py-2" 
+                   style="background-color: var(--lincoln-blue); border: none;">
+                    Enroll Now
+                </button>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12 text-center py-5">
+        <div class="opacity-50">
+            <h4 class="mt-3">No courses found for this year level.</h4>
+            <p>Please check back later or contact the Lincoln Admissions office.</p>
         </div>
     </div>
     {% endfor %}
 </div>
+
 {% endblock %}

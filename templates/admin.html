@@ -1,38 +1,123 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="bg-white p-4 shadow-sm rounded d-flex justify-content-between align-items-center mb-4">
-    <h3 class="fw-bold mb-0">Course Management Repository</h3>
-    <button class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#addCourseModal">+ Create New Course</button>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="fw-bold" style="color: var(--lincoln-blue);">Lincoln Admin Control Center</h3>
+    <button class="btn btn-dark rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#addModal">+ Create New Course</button>
 </div>
 
-<div class="table-responsive bg-white rounded shadow-sm p-3">
+<div class="table-responsive bg-white rounded-4 shadow-sm p-4 border-0">
     <table class="table table-hover align-middle">
         <thead class="table-light">
-            <tr><th>Code</th><th>Course Name</th><th>Department</th><th>Management</th></tr>
+            <tr>
+                <th class="border-0">Code</th>
+                <th class="border-0">Title</th>
+                <th class="border-0">Instructor</th>
+                <th class="border-0">Level</th>
+                <th class="border-0 text-end">Actions</th>
+            </tr>
         </thead>
         <tbody>
             {% for c in courses %}
             <tr>
-                <td class="fw-bold">{{ c.code }}</td>
-                <td>{{ c.title }}</td>
-                <td>{{ c.category }}</td>
-                <td><a href="/admin/delete/{{ c.id }}" class="btn btn-outline-danger btn-sm">Delete</a></td>
+                <td class="fw-bold text-primary">{{c.code}}</td>
+                <td class="fw-semibold">{{c.title}}</td>
+                <td>{{c.instructor}}</td>
+                <td><span class="badge rounded-pill bg-light text-dark border">Year {{c.year}}</span></td>
+                <td class="text-end">
+                    <button class="btn btn-sm btn-outline-primary rounded-pill me-2 px-3" data-bs-toggle="modal" data-bs-target="#editModal{{c.id}}">Edit / Chapters</button>
+                    <a href="/admin/delete/{{c.id}}" class="btn btn-sm btn-outline-danger rounded-pill px-3" onclick="return confirm('Archive this course from Lincoln Catalog?')">Delete</a>
+                </td>
             </tr>
+
+            <div class="modal fade" id="editModal{{c.id}}" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content border-0 shadow-lg">
+                        <div class="modal-header text-white" style="background-color: var(--lincoln-blue);">
+                            <h5 class="modal-title">Edit: {{c.title}}</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body p-4">
+                            <form action="/admin/edit/{{c.id}}" method="POST">
+                                <div class="row g-3 mb-3">
+                                    <div class="col-md-6">
+                                        <label class="small fw-bold text-muted">Course Code</label>
+                                        <input type="text" name="code" value="{{c.code}}" class="form-control border-2">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="small fw-bold text-muted">Year Level</label>
+                                        <select name="year" class="form-select border-2">
+                                            <option value="1" {{ 'selected' if c.year == 1 }}>Year 1</option>
+                                            <option value="2" {{ 'selected' if c.year == 2 }}>Year 2</option>
+                                            <option value="3" {{ 'selected' if c.year == 3 }}>Year 3</option>
+                                            <option value="4" {{ 'selected' if c.year == 4 }}>Year 4</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <label class="small fw-bold text-muted">Course Title</label>
+                                <input type="text" name="title" value="{{c.title}}" class="form-control mb-3 border-2">
+                                
+                                <label class="small fw-bold text-muted">Instructor</label>
+                                <input type="text" name="instructor" value="{{c.instructor}}" class="form-control mb-3 border-2">
+                                
+                                <label class="small fw-bold text-muted">Description</label>
+                                <textarea name="description" class="form-control mb-4 border-2" rows="3">{{c.description}}</textarea>
+                                
+                                <button type="submit" class="btn btn-primary w-100 fw-bold py-2 rounded-3" style="background-color: var(--lincoln-blue);">Update Basic Info</button>
+                            </form>
+                            
+                            <hr class="my-4">
+                            
+                            <h6 class="fw-bold mb-3"><i class="bi bi-journal-text me-2"></i>Curriculum Chapters</h6>
+                            <form action="/admin/add_module/{{c.id}}" method="POST" class="input-group mb-3">
+                                <input type="text" name="module_title" class="form-control" placeholder="New Chapter Title" required>
+                                <button type="submit" class="btn btn-success px-4">Add</button>
+                            </form>
+                            <div class="list-group list-group-flush border rounded-3 overflow-hidden">
+                                {% for m in c.modules %}
+                                <div class="list-group-item d-flex justify-content-between align-items-center py-2 bg-light">
+                                    <span class="small fw-semibold">Chapter {{loop.index}}: {{m.title}}</span>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             {% endfor %}
         </tbody>
     </table>
 </div>
 
-<div class="modal fade" id="addCourseModal" tabindex="-1">
-    <div class="modal-dialog"><form action="/admin/add" method="POST" class="modal-content">
-        <div class="modal-header"><h5 class="modal-title">New Academic Course</h5></div>
-        <div class="modal-body">
-            <input type="text" name="code" placeholder="Course Code" class="form-control mb-3" required>
-            <input type="text" name="title" placeholder="Full Course Name" class="form-control mb-3" required>
-            <input type="text" name="category" placeholder="Department (e.g. IT)" class="form-control mb-3" required>
-            <textarea name="description" placeholder="Short Description" class="form-control" rows="3"></textarea>
-        </div>
-        <div class="modal-footer"><button type="submit" class="btn btn-primary w-100">Save to Repository</button></div>
-    </form></div>
+<div class="modal fade" id="addModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <form action="/admin/add" method="POST" class="modal-content border-0 shadow-lg">
+            <div class="modal-header text-white" style="background-color: var(--lincoln-blue);">
+                <h5 class="modal-title">New Catalog Entry</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <input type="text" name="code" placeholder="BIT101" class="form-control border-2" required>
+                    </div>
+                    <div class="col-md-6">
+                        <select name="year" class="form-select border-2">
+                            <option value="1">Year 1</option>
+                            <option value="2">Year 2</option>
+                            <option value="3">Year 3</option>
+                            <option value="4">Year 4</option>
+                        </select>
+                    </div>
+                </div>
+                <input type="text" name="title" placeholder="Full Course Title" class="form-control mb-3 border-2" required>
+                <input type="text" name="instructor" placeholder="Lead Instructor Name" class="form-control mb-3 border-2" required>
+                <textarea name="description" placeholder="Short course description..." class="form-control border-2" rows="3"></textarea>
+            </div>
+            <div class="modal-footer border-0 p-4 pt-0">
+                <button type="submit" class="btn btn-success w-100 py-2 fw-bold rounded-3">Register Course</button>
+            </div>
+        </form>
+    </div>
 </div>
 {% endblock %}

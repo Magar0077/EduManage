@@ -1,102 +1,56 @@
-/* Layout Reset */
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-body {
-    font-family: 'Segoe UI', Arial, sans-serif;
-    background-color: #f8f9fa;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+:root {
+    --lincoln-blue: #1a237e;
+    --lincoln-gold: #ffc107;
+    --bg-light: #f4f7f9;
 }
 
-.content-wrapper { flex: 1; }
-
-/* Navigation */
-.navbar-college {
-    background-color: #003366; /* Deep University Blue */
-    border-bottom: 4px solid #cc9900; /* Gold Accent */
+body { 
+    background-color: var(--bg-light); 
+    font-family: 'Inter', sans-serif; 
 }
 
-/* Year Tab Navigation */
-.year-nav {
-    display: flex;
+/* FIXED NAVBAR - HIGH CONTRAST */
+.navbar { 
+    background-color: var(--lincoln-blue) !important; 
+    padding: 1rem; 
+    border-bottom: 3px solid var(--lincoln-gold);
+}
+.navbar-brand { color: white !important; font-weight: 800; letter-spacing: 1px; }
+.nav-link { color: rgba(255,255,255,0.85) !important; font-weight: 500; margin-right: 1rem; }
+.nav-link:hover { color: var(--lincoln-gold) !important; }
+
+/* CARDS */
+.course-card {
+    border: none; 
+    border-radius: 12px; 
     background: white;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    margin-bottom: 25px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
-
-.year-nav a {
-    flex: 1;
-    text-align: center;
-    padding: 12px;
-    text-decoration: none;
-    color: #003366;
-    font-weight: bold;
-    border-right: 1px solid #eee;
-}
-
-.year-nav a.active { background-color: #003366; color: white; }
-
-/* Professional Course Cards */
-.college-card {
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    margin-bottom: 30px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06); 
+    transition: 0.3s;
     overflow: hidden;
+}
+.course-card:hover { transform: translateY(-5px); }
+.card-accent { height: 5px; background: var(--lincoln-gold); border-radius: 12px 12px 0 0; }
+
+/* MODAL FIX */
+.modal-content { background: white !important; border-radius: 15px; border: none; }
+.modal-header { background: var(--lincoln-blue); color: white; border-top-left-radius: 15px; border-top-right-radius: 15px; }
+
+/* CENTERED YEAR NAVIGATION HELPER */
+.nav-year-link {
+    padding: 8px 24px;
+    border-radius: 50px;
+    text-decoration: none;
+    color: var(--lincoln-blue);
+    font-weight: 600;
     transition: 0.3s;
 }
 
-.college-card:hover { transform: translateY(-5px); }
-
-.card-banner {
-    background: #e9ecef;
-    height: 150px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    font-weight: bold;
-    color: #003366;
+.nav-year-link.active {
+    background-color: var(--lincoln-blue);
+    color: white !important;
+    box-shadow: 0 4px 10px rgba(26, 35, 126, 0.2);
 }
 
-.lock-badge {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: white;
-    padding: 5px;
-    border-radius: 50%;
-    color: #ffc107;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
-
-.instructor-info {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-top: 15px;
-    border-top: 1px solid #eee;
-}
-
-.initial-circle {
-    width: 35px;
-    height: 35px;
-    background: #17a2b8;
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.8rem;
-}
-
-/* Footer Styles */
-footer {
-    background: #212529;
-    color: white;
-    padding: 30px 0;
-    margin-top: 40px;
+.nav-year-link:hover:not(.active) {
+    background-color: #e8eaf6;
 }
